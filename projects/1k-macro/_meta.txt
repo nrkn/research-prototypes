@@ -1,0 +1,5 @@
+Date: 2015-04-09
+Tags: #code-golf, #js1k, #js
+LiveDemoFile: tmp/grid-fullscreen.html
+
+RemindMe: link to my actual JS1K 2015 entry if I find that 
