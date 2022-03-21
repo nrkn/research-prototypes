@@ -8,7 +8,7 @@ for [JS1K 2015](https://js1k.com/2015-hypetrain/)
 
 Some interesting files:
 
-- [A macro](bin/grid-demo.1k)
-- [Macro library](lib/tile-engine.1k)
-- [parser?](1k.js)
-- [another parser called v2?](v2/1k.js)
+- [A macro](//github.com/nrkn/research-prototypes/blob/main/projects/1k-macro/bin/grid-demo.1k)
+- [Macro library](//github.com/nrkn/research-prototypes/blob/main/projects/1k-macro/lib/tile-engine.1k)
+- [parser?](//github.com/nrkn/research-prototypes/blob/main/projects/1k-macro/1k.js)
+- [another parser called v2?](//github.com/nrkn/research-prototypes/blob/main/projects/1k-macro/v2/1k.js)
