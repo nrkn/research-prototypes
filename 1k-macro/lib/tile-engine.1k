@@ -1,0 +1,111 @@
+!names defghiklmnopqrstuvwxyz
+  
+//grid setup
+&width  9
+&height  8
+&tileSize  64
+&layers 3
+
+//layers
+&layer1  0
+&layer2  1
+&layer3  2
+
+//shape types
+&shapeRect  1
+&shapeCircle  2
+
+//shape properties
+&shapeType  0
+&color  1
+&left  2
+&top  3
+&w  4
+&h  5
+&radius  4
+&context  c  
+
+//arg aliases
+&event  @arg1
+&index  @arg1
+&layer  @arg2
+ 
+&mouseEventToIndex  ~~( &event.clientY / &tileSize ) * &width + ~~( &event.clientX / &tileSize )
+
+&eachCell  for( &index = &width * &height; &index--; )
+ 
+&indexToX  &index % &width
+&indexToY  ~~( &index / &width )
+
+&canvasX  &indexToX * &tileSize
+&canvasY  &indexToY * &tileSize
+
+&offset  &index + &layer * &width * &height
+
+&currentCell  @grids[ &offset ]
+
+&cellColor  &currentCell[ &color ]
+&cellShape  &currentCell[ &shapeType ]
+&cellLeft  &currentCell[ &left ] * &tileSize
+&cellTop  &currentCell[ &top ] * &tileSize
+&cellWidth  &currentCell[ &w ] * &tileSize
+&cellHeight  &currentCell[ &h ] * &tileSize
+&cellRadius  &currentCell[ &radius ] / 2 * &tileSize
+
+&tileCenter  &tileSize / 2
+&quarterTile  &tileSize / 4
+
+&newRandom  @random = Math.random();
+
+&percent50  .5 >
+&percent25  .25 >
+&random50  &percent50 @random
+&random25  &percent25 @random
+&chance50  &percent50 Math.random()
+&chance25  &percent25 Math.random()
+
+&randomHue  360 * @random
+&randomLightness  ~~( 33 * @random + 33 )
+&randomSaturation  ~~( 33 * @random + 33 )
+&randomBlue  "hsl(210," + &randomSaturation + "%," + &randomLightness + "%)"
+&randomGreen  "hsl(140," + &randomSaturation + "%," + &randomLightness + "%)"
+&randomColor  "hsl(" + &randomHue + "," + &randomSaturation + "%," + &randomLightness + "%)"
+&randomOffset  ( 1 - @random ) / 2
+&randomSize  @random
+&randomShape  &random50 ? &shapeRect : &shapeCircle
+
+&randomCell
+  [
+    &randomShape, 
+    &randomColor, 
+    &randomOffset, 
+    &randomOffset, 
+    &randomSize, 
+    &randomSize
+  ]
+
+@grids []
+  
+_blit
+  &currentCell && (
+    &context.fillStyle = &cellColor,           
+    
+    &shapeRect == &cellShape ? 
+      &context.fillRect(
+        &canvasX + &cellLeft, 
+        &canvasY + &cellTop, 
+        &cellWidth, 
+        &cellHeight
+      ) : 
+        &shapeCircle == &cellShape && (
+          &context.beginPath(), 
+          &context.arc(
+            &canvasX + &cellLeft + &cellRadius,
+            &canvasY + &cellTop + &cellRadius,
+            &cellRadius, 
+            0, 
+            &cellHeight
+          ), 
+          &context.fill()
+        )
+  )

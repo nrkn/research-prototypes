@@ -1,0 +1,60 @@
+!require lib/tile-engine
+!include _onclick
+
+//grid setup
+&width  11
+&height  11
+&tileSize @tileSize
+&layers = 2
+
+&getTileSize ~~Math.min( a.width / &width, a.height / &height )
+
+@tileSize &getTileSize
+
+&draw  
+  _blit( &index, &layer1 ),
+  _blit( &index, &layer2 )  
+    
+
+&randomLightness  ~~( 10 * @random + 45 )    
+&randomSaturation  ~~( 40 * @random + 25 )
+&randomGrass  "hsl(140," + &randomSaturation + "%," + &randomLightness + "%)" 
+
+&treeLightness  ~~( 10 * @random + 25 )    
+&treeSaturation  ~~( 25 * @random + 75 )
+&randomTree  "hsl(140," + &treeSaturation + "%," + &treeLightness + "%)" 
+
+$onclick onclick
+ 
+_createGrass
+  &newRandom
+  &currentCell = [ 
+    &shapeRect, 
+    &randomGrass, 
+    0, 
+    0,  
+    1, 
+    1 
+  ]
+  
+_createTrees
+  &newRandom
+  &currentCell = &chance25 ? [ 
+    &shapeCircle, 
+    &randomTree, 
+    &randomOffset, 
+    &randomOffset,  
+    @random, 
+    1 
+  ] : 0
+  
+_onclick
+  &eachCell &draw;     
+
+main  
+  &eachCell
+    _createGrass( &index, &layer1 ),
+    _createTrees( &index, &layer2 ),
+    &draw
+    
+    

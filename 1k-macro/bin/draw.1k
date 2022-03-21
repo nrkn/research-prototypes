@@ -1,0 +1,99 @@
+!names defghijklmnopqrstuvwxyz
+
+@data []
+
+&current @data[ @arg1 ]
+
+&each
+  for( @arg1 = &shapeCount; @arg1--; )
+
+&rect 0
+&circle 1
+&path 2
+&text 3  
+
+&type 0
+&color 1
+&x 2
+&y 3
+&width 4
+&height 5
+&radius 4
+&points 4
+&str 4
+
+&shapeCount 10
+
+&boundsWidth 400
+&boundsHeight 400
+
+&currentType &current[ &type ]
+&currentColor &current[ &color ]
+&currentX &current[ &x ]
+&currentY &current[ &y ]
+&currentWidth &current[ &width ]
+&currentHeight &current[ &height ]
+&currentRadius &current[ &radius ]
+&currentPoints &current[ &points ]
+&currentString &current[ &str ]
+
+&context c
+
+&newRandom @random = Math.random()
+
+&randomType ~~( @random * 4 )
+&randomColor 'hsl(' + ~~( Math.random() * 360 ) + ',' + ~~( Math.random() * 100 ) + '%,' + ~~( Math.random() * 100 ) + '%)'
+&randomX ~~( Math.random() * &boundsWidth )
+&randomY ~~( Math.random() * &boundsHeight )
+&randomWidth ~~( Math.random() * 50 )
+&randomHeight ~~( Math.random() * 50 )
+&randomRadius ~~( Math.random() * 25 )
+
+_drawPath
+  &context.beginPath();
+  &context.moveTo( &currentPoints[ 0 ], &currentPoints[ 1 ] );
+  for( @arg2 = &currentPoints.length / 2; @arg2--; )
+    &context.lineTo( &currentPoints[ @arg2 * 2 ], &currentPoints[ @arg2 * 2 + 1 ] );
+  &context.fill()
+  
+&blit
+  &each
+    &context.fillStyle = &currentColor,
+      &currentType == &rect ?
+        &context.fillRect( &currentX, &currentY, &currentWidth, &currentHeight ) :
+        &currentType == &circle ? (
+          &context.beginPath(), 
+          &context.arc(
+            &currentX,
+            &currentY,
+            &currentRadius, 
+            0, 
+            7
+          ), 
+          &context.fill()
+        ) :
+          &currentType == &text ? (
+            &context.fillText( &currentString, &currentX, &currentY )
+          ) : _drawPath( @arg1 )
+          
+    
+
+&randomShape
+  &newRandom,
+  &current = [
+    &randomType,
+    &randomColor,
+    &randomX,
+    &randomY,
+    &randomType == &circle ? 
+      &randomRadius : 
+      &randomType == &path ? 
+        [ &randomX, &randomY, &randomX, &randomY, &randomX, &randomY ] : 
+        &randomType == &text ? 
+        'Hello world' : &randomWidth,
+    &randomHeight
+  ]
+  
+main
+  &each &randomShape;
+  &blit

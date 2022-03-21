@@ -1,0 +1,59 @@
+!require lib/tile-engine
+!include _onclick
+
+//grid setup
+&width  20
+&height  10
+&tileSize  64
+
+&draw
+  _blit( &index, &layer1 ),
+  _blit( &index, &layer2 ),
+  _blit( &index, &layer3 )     
+
+$onclick onclick
+
+_createRandom
+  &newRandom
+  &currentCell = &chance25 ? &randomCell : 0
+  
+_placeRandom  
+  &newRandom
+  &currentCell = &randomCell
+
+_createSea
+  &newRandom
+  &currentCell = [ 
+    &shapeRect, 
+    &randomBlue, 
+    0, 
+    0,  
+    1, 
+    1 
+  ]
+ 
+_createLand
+  &newRandom
+  &currentCell = &chance25 ? [ 
+    &shapeRect, 
+    &randomGreen, 
+    0, 
+    0, 
+    1, 
+    1 
+  ] : 0
+  
+_onclick
+  _placeRandom( &mouseEventToIndex, &layer3 );
+  
+  &eachCell &draw;     
+
+main  
+  &eachCell
+    _createSea( &index, &layer1 ),
+    _createLand( &index, &layer2 ),
+    _createRandom( &index, &layer3 ),
+    
+    &draw
+    
+    

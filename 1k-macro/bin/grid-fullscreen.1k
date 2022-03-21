@@ -1,0 +1,6 @@
+!require bin/grid-demo
+
+&tileSize @tileSize
+&getTileSize ~~Math.min( a.width / &width, a.height / &height )
+
+@tileSize &getTileSize
