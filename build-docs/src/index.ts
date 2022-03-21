@@ -118,13 +118,52 @@ const start = async () => {
 
   const projectData = await Promise.all(projectNames.map(buildProject))
 
+  const tagToNames = new Map<string,string[]>()
+
+  for( const [ name, data ] of projectData ){
+    const { meta } = data
+    
+    if( meta.tags === undefined ) continue
+
+    for( const tag of meta.tags ){
+      const list = tagToNames.get( tag ) || []
+
+      list.push( name )
+
+      tagToNames.set( tag, list )
+    }
+  }
+
+  const tags: string[] = []
+
+  for( const tag of tagToNames.keys() ){
+    tags.push(
+      `[${ tag }](tagged-${ tag }.md)`
+    )
+
+    const pred = ( n: string ) => 
+      tagToNames.get( tag )!.includes( n )
+
+    const tagProjectNames = projectNames.filter( pred )
+
+    const indexLinks = tagProjectNames.map(
+      n => ` - [${n}](${n})`
+    ).join('\n')
+
+    const tagged = `## projects tagged ${ tag }\n\n${ indexLinks }\n`
+
+    await writeFile( join( docsRoot, `tagged-${ tag }.md` ), tagged, 'utf8' )
+  }
+
+  const tagged = `Tags: ${ tags.join( ' ' )}`
+
   // build docs/readme.md index (can do metadata stuff later from tags etc)
 
   const indexLinks = projectNames.map(
     n => ` - [${n}](${n})`
   ).join('\n')
 
-  const index = `## projects\n\n${indexLinks}\n`
+  const index = `## projects\n\n${ tagged }\n\n${indexLinks}\n`
 
   await writeFile(join(docsRoot, 'readme.md'), index, 'utf8')
 
