@@ -10,7 +10,7 @@ Some interesting files:
 
 - [A macro](bin/grid-demo.1k)
 - [A macro library](lib/tile-engine.1k)
-- [You can click to change the tiles apparently](tmp/grid-fullscreen.html)
+- [You can click to change the tiles apparently](tmp/grid-fullscreen.html?raw=1)
 - [parser?](1k.js)
 - [another build script called v2?](v2/1k.js)
 
